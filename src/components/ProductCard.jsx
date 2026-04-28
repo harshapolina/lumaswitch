@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
 
 const ProductCard = ({ product, lightOn, viewSize = "M" }) => {
   const [hovered, setHovered] = useState(false);
+  const { addToCart } = useAppContext();
 
   return (
     <Link
@@ -68,23 +70,37 @@ const ProductCard = ({ product, lightOn, viewSize = "M" }) => {
         />
       </div>
 
-      <div className="mt-3">
-        <div className="flex items-baseline gap-2 flex-wrap">
-          <h3 className={`icw-text ${viewSize === "L" ? "text-[15px]" : "text-[13px]"} leading-tight`}>
-            {product.name}
-          </h3>
-          {product.isNew && (
-            <span
-              className="text-[11px] icw-text-blue italic"
-              style={{ fontFamily: "'Cormorant Garamond', serif" }}
-            >
-              New!
-            </span>
-          )}
+      <div className="mt-3 flex flex-col justify-between flex-1">
+        <div>
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <h3 className={`icw-text ${viewSize === "L" ? "text-[15px]" : "text-[13px]"} leading-tight`}>
+              {product.name}
+            </h3>
+            {product.isNew && (
+              <span
+                className="text-[11px] icw-text-blue italic"
+                style={{ fontFamily: "'Cormorant Garamond', serif" }}
+              >
+                New!
+              </span>
+            )}
+          </div>
         </div>
-        <p className={`icw-text mt-1 ${viewSize === "L" ? "text-[14px]" : "text-[12px]"}`}>
-          {product.price}
-        </p>
+        
+        <div className="flex items-center justify-between mt-2 pt-1 border-t border-[#4a181810]">
+          <p className={`icw-text font-medium ${viewSize === "L" ? "text-[14px]" : "text-[12px]"}`}>
+            {product.price}
+          </p>
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              addToCart(product, 1);
+            }}
+            className="text-[10px] md:text-[11px] uppercase tracking-widest bg-[#4a1818] text-[#ede4cf] px-3 py-1.5 hover:bg-black transition-colors rounded-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transform translate-y-1 group-hover:translate-y-0 duration-300"
+          >
+            Add
+          </button>
+        </div>
       </div>
     </Link>
   );
